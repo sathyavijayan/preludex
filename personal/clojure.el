@@ -66,27 +66,6 @@
 
   (eval-after-load 'clojure-mode
     '(font-lock-add-keywords
-      'clojure-mode `(("(\\(fn\\)[\[[:blank:]\n]"
-                       (1 (progn (compose-region (match-beginning 1)
-                                                 (match-end 1) "λ")
-                                 clojure-font-locking-ligatures-face))))))
-
-  (eval-after-load 'clojure-mode
-    '(font-lock-add-keywords
-      'clojure-mode `(("\\(#\\)("
-                       (1 (progn (compose-region (match-beginning 1)
-                                                 (match-end 1) "ƒ")
-                                 clojure-font-locking-ligatures-face))))))
-
-  (eval-after-load 'clojure-mode
-    '(font-lock-add-keywords
-      'clojure-mode `(("\\(#\\){"
-                       (1 (progn (compose-region (match-beginning 1)
-                                                 (match-end 1) "∈")
-                                 clojure-font-locking-ligatures-face))))))
-
-  (eval-after-load 'clojure-mode
-    '(font-lock-add-keywords
       'clojure-mode `(("(\\(partial\\)[[:blank:]\n]"
                        (1 (progn (compose-region (match-beginning 1)
                                                  (match-end 1) "Ƥ")
@@ -165,6 +144,7 @@
                                                  (match-end 1) "⟾")
                                  clojure-font-locking-ligatures-face))))))
 
+
   ;; u/log, mu/log, u/log*, mu/log*
   (eval-after-load 'clojure-mode
     '(font-lock-add-keywords
@@ -181,6 +161,65 @@
 ;;
 ;; (u/trace )
 ;;
+
+(defun fira-code-mode--make-alist (list)
+  "Generate prettify-symbols alist from LIST."
+  (let ((idx -1))
+    (mapcar
+     (lambda (s)
+       (setq idx (1+ idx))
+       (let* ((code (+ #Xe100 idx))
+          (width (string-width s))
+          (prefix ())
+          (suffix '(?\s (Br . Br)))
+          (n 1))
+     (while (< n width)
+       (setq prefix (append prefix '(?\s (Br . Bl))))
+       (setq n (1+ n)))
+     (cons s (append prefix suffix (list (decode-char 'ucs code))))))
+     list)))
+
+(defconst fira-code-mode--ligatures
+  '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
+    "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
+    "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
+    "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
+    ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
+    "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
+    "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
+    "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
+    ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
+    "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
+    "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
+    "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
+    "x" ":" "+" "+" "*"))
+
+(defvar fira-code-mode--old-prettify-alist)
+
+(defun fira-code-mode--enable ()
+  "Enable Fira Code ligatures in current buffer."
+  (setq-local fira-code-mode--old-prettify-alist prettify-symbols-alist)
+  (setq-local prettify-symbols-alist (append (fira-code-mode--make-alist fira-code-mode--ligatures) fira-code-mode--old-prettify-alist))
+  (prettify-symbols-mode t))
+
+(defun fira-code-mode--disable ()
+  "Disable Fira Code ligatures in current buffer."
+  (setq-local prettify-symbols-alist fira-code-mode--old-prettify-alist)
+  (prettify-symbols-mode -1))
+
+(define-minor-mode fira-code-mode
+  "Fira Code ligatures minor mode"
+  :lighter " Fira Code"
+  (setq-local prettify-symbols-unprettify-at-point 'right-edge)
+  (if fira-code-mode
+      (fira-code-mode--enable)
+    (fira-code-mode--disable)))
+
+(defun fira-code-mode--setup ()
+  "Setup Fira Code Symbols"
+  (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol"))
+
+(provide 'fira-code-mode)
 
 ;;
 ;; Couple of smart copy and paste on s-exprs
@@ -325,11 +364,10 @@
 (defun my-clojure-mode-hook ()
   (clj-refactor-mode 1)
   (yas-minor-mode 1) ; for adding require/use/import
-  (cljr-add-keybindings-with-prefix "C-c C-r")
-  )
+  (cljr-add-keybindings-with-prefix "C-c C-r"))
 
 (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
-
+(add-hook 'clojure-mode-hook 'fira-code-mode)
 ;;
 ;; Error buffer
 ;;

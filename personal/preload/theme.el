@@ -10,28 +10,28 @@
 (setq solarized-use-variable-pitch nil)
 
 
-;; set favourite font
-(defvar default-preferred-font "Roboto Mono Thin for Powerline"
-  "Select your default preferred font.  This will be activated only if present.")
-(defvar default-preferred-font-size 150
-  "Select your preferred font size.")
-
-;; enable default font if present
-(if (member default-preferred-font (font-family-list))
-    (progn
-      (add-to-list 'default-frame-alist
-                   `(font . ,(concat default-preferred-font  "-" (number-to-string (/ default-preferred-font-size 10)))))
-      (set-frame-font default-preferred-font))
-  (message (format "'%s' font not available" default-preferred-font)))
-
 ;; set default font size
-(set-face-attribute 'default nil :height default-preferred-font-size)
+(defvar default-preferred-font-size 160
+  "Select your preferred font size.")
+;; set favourite font
+;; enable default font if present
+(defvar default-preferred-font "Victor Mono" ;Menlo
+  "Select your default preferred font.  This will be activated only if present.")
 
-;; hightlight modeline of active buffer
 (set-face-foreground 'mode-line "black")
+;; hightlight modeline of active buffer
 (set-face-background 'mode-line "green4")
 (set-face-background 'mode-line-inactive "grey20")
 (set-face-foreground 'mode-line-buffer-id "white")
+
+(if (member default-preferred-font (font-family-list))
+    (progn
+      (add-to-list 'default-frame-alist
+                   `(font . ,(concat default-preferred-font  "-" (number-to-string (/ default-preferred-font-size 10)) ":weight=bold")))
+      (set-frame-font default-preferred-font))
+  (message (format "'%s' font not available" default-preferred-font)))
+
+(set-face-attribute 'default nil :height default-preferred-font-size)
 
 ;; highligh tags
 (custom-set-faces
