@@ -578,7 +578,6 @@ This is used by pretty-printing commands."
   ;; displays the current java version
   (message (concat "Java HOME: " (getenv "JAVA_HOME"))))
 
-
 ;;
 ;; Version used in (my) perf measurement
 ;;
