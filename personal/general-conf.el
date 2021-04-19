@@ -57,6 +57,9 @@
         (dracula-theme           dracula)
         ;;light
         (leuven-theme            leuven)
+        ;; flat ui
+        (flucui-themes           flucui-dark)
+        (flucui-themes           flucui-light)
         ;;(spacemacs-theme         spacemacs-light-theme)
         (color-theme-sanityinc-tomorrow sanityinc-tomorrow-blue)
         (color-theme-sanityinc-tomorrow sanityinc-tomorrow-day)))
@@ -82,7 +85,8 @@
 ;;
 ;; Setting the current theme
 ;;
-(load-theme-by-name 'dracula)
+;;(load-theme-by-name 'dracula)
+ (load-theme-by-name 'flucui-light)
 ;; light theme
 ;; (load-theme 'adwaita 't)
 ;; (load-theme-by-name 'leuven)
@@ -94,10 +98,10 @@
 
 
 ;; hightlight modeline of active buffer
-(set-face-foreground 'mode-line "black")
-(set-face-background 'mode-line "grey25")
-(set-face-background 'mode-line-inactive "grey20")
-(set-face-foreground 'mode-line-buffer-id "white")
+;;(set-face-foreground 'mode-line "black")
+;;(set-face-background 'mode-line "grey25")
+;;(set-face-background 'mode-line-inactive "grey20")
+;;(set-face-foreground 'mode-line-buffer-id "white")
 
 ;; disable scroll bars
 (if (display-graphic-p)
