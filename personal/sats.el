@@ -26,6 +26,19 @@
 (key-chord-define-global "FF" 'projectile-find-file)
 (key-chord-define-global "PP" 'projectile-switch-project)
 
+;; quick switch to dark mode
+(defun switch-to-dark-mode ()
+  (interactive)
+  (message "And miles to go before YOU sleep ! (-_-)zzz")
+  (load-theme 'flucui-dark))
+
+(defun switch-to-light-mode ()
+  (interactive)
+  (message "Rise and shine ! (^_^)/")
+  (load-theme 'flucui-light))
+
+(key-chord-define-global "DD" 'switch-to-dark-mode)
+(key-chord-define-global "LL" 'switch-to-light-mode)
 
 ;; always show line numbers
 ;(global-display-line-numbers-mode)
